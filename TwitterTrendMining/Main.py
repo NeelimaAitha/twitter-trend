@@ -188,73 +188,6 @@ def moodPrediction():
             result = 'Neutral'
         text.insert(END,"Tweets Text : "+dataset[i]+"\n")
         text.insert(END,"Mood Detection : "+result+"\n\n")
-        
-                    
-def extractTopic():
-    text.delete('1.0', END)
-    global education,sports,health,movie,politics
-    number_of_Words = 10
-    topicList = []
-    weightList = []
-    textList = []
-    num_comp = 50
-    iteration = 5
-    method = 'online'
-    offset = 50.
-    state = 42
-    minValue = 2
-    maxValue = 0.95
-    totalFeatures = 1000
-    dbpedia = pd.read_csv(filename)
-    dbpedia = dbpedia.replace(np.nan, '', regex=True)
-    textData = dbpedia['tweet']
-    vector = CountVectorizer(min_df=minValue, stop_words='english', max_df=maxValue, max_features=totalFeatures)
-    tfIDF = vector.fit_transform(textData)
-    lda_allocation = LatentDirichletAllocation(max_iter=iteration,n_components=num_comp, learning_offset=offset, learning_method=method, random_state=state)
-    lda_allocation.fit(tfIDF)
-    temp = textData.values
-   
-   
-  
-
-    topics_name = ['Education','Sports','Health','Film','Politics']
-    for i in range(len(topicList)):
-        text.insert(END,"Topic  : "+str(textList[i])+"\n")
-        text.insert(END,"Label  : "+str(topicList[i])+"\n")
-        #text.insert(END,"Weight : "+str(weightList[i])+"\n\n")
-        data = textList[i]
-        arr = data.lower().split(" ")
-        if 'education' in arr:
-            text.insert(END,"Tweets Belongs to Topic : Education\n\n")
-            print(textList[i]+" Education")
-        elif 'sport' in arr or 'soccer' in arr or 'football' in arr:
-            text.insert(END,"Tweets Belongs to Topic : Sports\n\n")
-            print(textList[i]+" Sports")
-        elif 'health' in arr:
-            text.insert(END,"Tweets Belongs to Topic : Health\n\n")
-            print(textList[i]+" Health")
-        elif 'movie' in arr:
-            text.insert(END,"Tweets Belongs to Topic : Film\n\n")
-            print(textList[i]+" Film")
-        elif 'politics' in arr:
-            text.insert(END,"Tweets Belongs to Topic : Politics\n\n")
-            print(textList[i]+" Politics")
-        else:
-            education_count = [arr.count(v) for v in education]
-            sports_count = [arr.count(v) for v in sports]
-            health_count = [arr.count(v) for v in health]
-            movie_count = [arr.count(v) for v in movie]
-            politics_count = [arr.count(v) for v in politics]
-            e_count = np.count_nonzero(education_count)
-            s_count = np.count_nonzero(sports_count)
-            h_count = np.count_nonzero(health_count)
-            m_count  = np.count_nonzero(movie_count)
-            p_count = np.count_nonzero(politics_count)
-            count_arr = [e_count,s_count,h_count,m_count,p_count]
-            count_arr = np.asarray(count_arr)
-            predict = np.argmax(count_arr)
-            text.insert(END,"Tweets Belongs to Topic : "+topics_name[predict]+"\n\n")
-            print(textList[i]+" "+topics_name[predict])
          
 
 font = ('times', 15, 'bold')
@@ -299,9 +232,6 @@ graphButton = Button(main, text="Top Ten Trending Hashtags Graph", command=graph
 graphButton.place(x=350,y=250)
 graphButton.config(font=ff)
 
-graphButton = Button(main, text="Extract Trending Topic", command=extractTopic)
-graphButton.place(x=650,y=250)
-graphButton.config(font=ff)
 
 font1 = ('times', 13, 'bold')
 text=Text(main,height=18,width=125)
